@@ -8,6 +8,7 @@
       <h2 class="subtitle">
         My praiseworthy Nuxt.js project
       </h2>
+      <nuxt-link to="/home">关于</nuxt-link>
       <div class="links">
         <a
           href="https://nuxtjs.org/"
