@@ -19,8 +19,10 @@ import Logo from '~/components/Logo.vue'
 export default {
   components: {
     Logo
-  }
+  },
+  methods:{}
 }
+
 </script>
 
 <style>
@@ -54,4 +56,5 @@ export default {
 .links {
   padding-top: 15px;
 }
+
 </style>

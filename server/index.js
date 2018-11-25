@@ -1,19 +1,19 @@
 const express = require('express')
 const consola = require('consola')
 const { Nuxt, Builder } = require('nuxt')
-// let api = require('./api')
+let api = require('./api')
 
 const app = express()
 const host = process.env.HOST || '127.0.0.1'
 const port = process.env.PORT || 3000
-// var bodyParser = require('body-parser')
+var bodyParser = require('body-parser')
 
-// app.use(bodyParser.json())
-// app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }))
 
-app.set('port', port); 
+app.set('port', port);
 // Import API Routes
-// app.use('/api', api)
+app.use('/api', api)
 // Import and Set Nuxt.js options
 let config = require('../nuxt.config.js')
 config.dev = !(process.env.NODE_ENV === 'production')

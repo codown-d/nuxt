@@ -3,7 +3,8 @@
  */
 const db = require('../../model/db.js')
 const sql = require('../../model/sql.js')
-// const url = require('url')
+const url = require('url')
+let {sendMsg}= require('../../utlis')
 // 引入redis
 /**
  *  index show
@@ -11,7 +12,6 @@ const sql = require('../../model/sql.js')
 exports.indexShow = (req, res, next) => {
   db.query(sql.index, function (err, rows, fields) {
     if (err) {
-      console.log(132465)
       throw err
     }
     let result=JSON.parse(JSON.stringify(rows))
@@ -63,8 +63,9 @@ exports.addUser = (req, res, next) => {
     }
   })
 }*/
-/*exports.getAddUser = (req, res, next) => {
+exports.getAddUser = (req, res, next) => {
   let params = url.parse(req.url, true)
+  console.log(params)
   db.query(sql.addUser({
     id: params.query.id,
     name: params.query.name,
@@ -75,10 +76,39 @@ exports.addUser = (req, res, next) => {
     if (err) {
       throw err
     }
-    res.json({statue:200})
+    res.json(sendMsg(200,rows.message))
     // 检查是否存在获取值（redis）
   })
-}*/
+}
+exports.delUser = (req, res, next) => {
+  let params = url.parse(req.url, true)
+  db.query(sql.delUser({
+    id: params.query.id,
+    name: params.query.name,
+    age: params.query.age,
+    address: params.query.address,
+    role: params.query.role
+  }),function (err, rows, fields) {
+    if (err) {throw err}
+    res.json(sendMsg(200,rows.message))
+    // 检查是否存在获取值（redis）
+  })
+}
+exports.updataUser = (req, res, next) => {
+  let params = url.parse(req.url, true)
+  db.query(sql.updataUser({
+    id: params.query.id ,
+    name: params.query.name,
+    age: params.query.age,
+    address: params.query.address,
+    role: params.query.role
+  }),function (err, rows, fields) {
+    if (err) {throw err}
+    res.json(sendMsg(200,rows.message))
+    // 检查是否存在获取值（redis）
+  })
+}
+
 /*
 exports.postAddUser = (req, res, next) => {
   let params = req.body

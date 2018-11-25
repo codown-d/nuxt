@@ -5,7 +5,6 @@ const mysql = require('mysql')
 const setting = require('./setting.js')
 
 // 填写数据库连接信息，
-console.log(setting)
 const option = {
   host: setting.host,
   port: setting.port,

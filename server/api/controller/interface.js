@@ -7,7 +7,9 @@ const myrouter = require('./router.js')
 let router = Router()
 // index router
 router.get('/u', myrouter.indexShow)
-// router.get('/getadduser', myrouter.getAddUser)
+router.get('/getadduser', myrouter.getAddUser)
+router.get('/deluser', myrouter.delUser)
+router.get('/updatauser', myrouter.updataUser)
 // router.post('/postAdduser', myrouter.postAddUser)
 // 页面初始化加载一级分类第一个
 module.exports =router

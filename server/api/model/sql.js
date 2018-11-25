@@ -6,12 +6,22 @@
  */
 
 exports.index = 'select * from user'
-exports.addUser = (parameter) => {
-  let {id=0, name='0', age=0, address='-',role='-'}=parameter
+exports.addUser = ({id, name, age, address,role}) => {
   return `INSERT INTO user ( id, name,age,address,role )
                       VALUES
-                      ( ${0}, ${name}, ${age}, ${address},${role})`
+                      ( '${id}', '${name}', '${age}', '${address}','${role}')`
     }
+exports.delUser = ({id,name}) => {
+  return `DELETE FROM user WHERE id = '${id}' and name = '${name}'`
+}
+
+exports.updataUser=({id,name,address,age,role})=>{
+  return `UPDATE user SET name = '${name}',
+  address = '${address}',
+  age = '${age}',
+  role = '${role}' WHERE id = '${id}'`
+}
+
 /**
  * 查找分类
  */
