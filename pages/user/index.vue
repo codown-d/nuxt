@@ -13,53 +13,53 @@
   </div>
 </template>
 <script>
-export default{
-  async asyncData({ app }) {
-    const user = await app.$axios.$get('/api/u')
-    return {user}
-  },
-  data(){
-    return{
-      userInfo:{
-        id:12346,
-        name:123465,
-        address:'456789',
-        age:'456',
-        role:123,
-      },
-      msg:'hello vue '
+  export default {
+    async asyncData({app}) {
+      const user = await app.$axios.$get('/api/u')
+      return {user}
+    },
+    data() {
+      return {
+        userInfo: {
+          id: 12346,
+          name: 123465,
+          address: '456789',
+          age: '456',
+          role: 123,
+        },
+        msg: 'hello vue '
       }
     },
-    mounted(){
-
+    mounted() {
     },
-  components:{},
-  methods:{
-    async add(){
-      let result = await this.$axios.$get('/api/getadduser',{
-      params: this.userInfo})
-      console.log(result)
-      this.user = await this.$axios.$get('/api/u')
+    components: {},
+    methods: {
+      async add() {
+        let result = await this.$axios.$get('/api/getadduser', {
+          params: this.userInfo
+        })
+        console.log(result)
+        this.user = await this.$axios.$get('/api/u')
+      },
+      async del() {
+        let result = await this.$axios.$get('/api/deluser', {
+          params: this.userInfo
+        })
+        this.user = await this.$axios.$get('/api/u')
+        console.log(result)
+      },
+      async updata() {
+        let result = await this.$axios.$get('/api/updatauser', {
+          params: this.userInfo
+        })
+        this.user = await this.$axios.$get('/api/u')
+        console.log(result)
+      }
     },
-    async del(){
-      let result = await this.$axios.$get('/api/deluser',{
-      params: this.userInfo
-      })
-      this.user = await this.$axios.$get('/api/u')
-      console.log(result)
-    },
-    async updata(){
-      let result = await this.$axios.$get('/api/updatauser',{
-      params: this.userInfo
-      })
-      this.user = await this.$axios.$get('/api/u')
-      console.log(result)
+    head: {
+      title: 'Home page '
     }
-  },
-  head: {
-    title: 'Home page '
   }
-}
 
 
 </script>
