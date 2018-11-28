@@ -22,8 +22,11 @@
       function init() {
         container = document.createElement( 'div' );
         document.body.appendChild( container );
-        camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.25, 20 );
-        camera.position.set( - 1.8, 0.9, 2.7 );
+        camera = new THREE.PerspectiveCamera( 100, window.innerWidth / window.innerHeight, 0.1, 1000 );
+//        camera.position.set( - 1.8, 0.9, 2.7 );
+        camera.position.set(0, 0, 500);
+        camera.lookAt(new THREE.Vector3(0,0,0));
+
         controls = new THREE.OrbitControls( camera );
         controls.target.set( 0, - 0.2, - 0.2 );
         controls.update();
@@ -42,7 +45,7 @@
         scene.add( light );
         // model
         var loader = new THREE.GLTFLoader();
-        loader.load( '/baldman/scene.gltf', function ( gltf ) {
+        loader.load( '/model2/scene.gltf', function ( gltf ) {
           gltf.scene.traverse( function ( child ) {
             if ( child.isMesh ) {
               child.material.envMap = envMap;
