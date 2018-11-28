@@ -15,16 +15,16 @@
       gl_FragColor = vec4( color, 1.0 );
       }
     </script>
-    <div style="position: absolute" v-if="false">
+    <div style="position: absolute" v-if="true">
       <logo/>
       <h1 class="title">
         myapp
       </h1>
       <h2 class="subtitle">
-        My praiseworthy Nuxt.js project
+        人间草木深&nbsp;&nbsp;我心桃花源
       </h2>
-      <nuxt-link to="/user">首页</nuxt-link>
-      <nuxt-link to="/home">首页</nuxt-link>
+      <nuxt-link to="/user">Go Home</nuxt-link>
+      <nuxt-link to="/model">ThreeJs model</nuxt-link>
     </div>
   </section>
 </template>
@@ -33,6 +33,7 @@
   import Logo from '~/components/Logo.vue'
 
   var THREE = require('three');
+  require('@/assets/GLTFLoader.js')
   THREE.Cache.enabled = true;
   export default {
     components: {
@@ -173,7 +174,7 @@
         textGeo = new THREE.BufferGeometry().fromGeometry(textGeo);
         textMesh1 = new THREE.Mesh(textGeo, materials);
         textMesh1.position.x = centerOffset;
-        textMesh1.position.y = hover;
+        textMesh1.position.y = 0;
         textMesh1.position.z = 0;
         textMesh1.rotation.x = 0;
         textMesh1.rotation.y = Math.PI * 2;
