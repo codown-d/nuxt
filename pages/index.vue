@@ -15,17 +15,20 @@
       gl_FragColor = vec4( color, 1.0 );
       }
     </script>
-    <div style="position: absolute" v-if="true">
-      <logo/>
+    <div v-if="true" class="text">
+      <logo v-if="false"/>
       <h1 class="title">
-        myapp
+        ip:{{user[0].ip}} {{user[0].count}} visit
       </h1>
-      <h2 class="subtitle">
-        人间草木深&nbsp;&nbsp;我心桃花源
-      </h2>
-      <nuxt-link to="/user">Go Home</nuxt-link>
-      <nuxt-link to="/model">ThreeJs model</nuxt-link>
+      <p style="color: #409eff">
+        <nuxt-link to="/user">Go Home</nuxt-link>
+        <nuxt-link to="/model">ThreeJs model</nuxt-link>
+      </p>
     </div>
+    <h2 class="subtitle">
+      <p style="float: right">人<br/>间<br/>草<br/>木<br/>深</p>
+      <p style="float:left;padding: 30px 10px 0 0">我<br/>心<br/>桃<br/>花<br/>源</p>
+    </h2>
   </section>
 </template>
 
@@ -36,13 +39,17 @@
   require('@/assets/GLTFLoader.js')
   THREE.Cache.enabled = true;
   export default {
+    async asyncData({app}) {
+      const user = await app.$axios.$get('/api/getCount')
+      return {user}
+    },
     components: {
       Logo
     },
     methods: {},
     mounted() {
       var SEPARATION = 100, AMOUNTX = 50, AMOUNTY = 50;
-      var text = "three.js",
+      var text = "welcome",
         height = 20,
         size = 200,
         hover = 200,
@@ -62,14 +69,15 @@
       var windowHalfY = window.innerHeight / 2;
       init();
       animate();
+
       function init() {
         container = document.getElementById('three');
         document.body.appendChild(container);
         camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 10000);
         camera.position.z = 1000;
         scene = new THREE.Scene();
-        scene.background = new THREE.Color( 0x000000 );
-				scene.fog = new THREE.Fog( 0x000000, 250, 1400 );
+        scene.background = new THREE.Color(0x000000);
+        scene.fog = new THREE.Fog(0x000000, 850, 1400);
         var numParticles = AMOUNTX * AMOUNTY;
         var positions = new Float32Array(numParticles * 3);
         var scales = new Float32Array(numParticles);
@@ -97,17 +105,17 @@
         particles = new THREE.Points(geometry, material);
         scene.add(particles);
 
-        var dirLight = new THREE.DirectionalLight( 0xffffff, 0.125 );
-        dirLight.position.set( 0, 0, 1 ).normalize();
-        scene.add( dirLight );
+        var dirLight = new THREE.DirectionalLight(0xffffff, 0.125);
+        dirLight.position.set(0, 0, 1).normalize();
+        scene.add(dirLight);
 
-        var pointLight = new THREE.PointLight( 0xffffff, 1.5 );
-        pointLight.position.set( 0, 100, 90 );
-        scene.add( pointLight );
+        var pointLight = new THREE.PointLight(0xffffff, 1.5);
+        pointLight.position.set(0, 100, 90);
+        scene.add(pointLight);
         pointLight.color.setStyle('rgb(255, 0, 0)');
         materials = [
-          new THREE.MeshPhongMaterial( { color: 0xffffff, flatShading: true } ), // front
-          new THREE.MeshPhongMaterial( { color: 0xffffff } ) // side
+          new THREE.MeshPhongMaterial({color: 0xffffff, flatShading: true}), // front
+          new THREE.MeshPhongMaterial({color: 0xffffff}) // side
         ];
 
         group = new THREE.Group();
@@ -116,12 +124,12 @@
         loadFont();
 
         var plane = new THREE.Mesh(
-          new THREE.PlaneBufferGeometry( 10000, 10000 ),
-          new THREE.MeshBasicMaterial( { color: 0xffffff, opacity: 0.5, transparent: true } )
+          new THREE.PlaneBufferGeometry(10000, 10000),
+          new THREE.MeshBasicMaterial({color: 0xffffff, opacity: 0.5, transparent: true})
         );
         plane.position.y = 0;
-        plane.rotation.x = - Math.PI / 2;
-        scene.add( plane );
+        plane.rotation.x = -Math.PI / 2;
+        scene.add(plane);
 
         renderer = new THREE.WebGLRenderer({antialias: true});
         renderer.setPixelRatio(window.devicePixelRatio);
@@ -134,6 +142,7 @@
         document.addEventListener('touchmove', onDocumentTouchMove, false);
         window.addEventListener('resize', onWindowResize, false);
       }
+
       function createText() {
         textGeo = new THREE.TextGeometry(text, {
           font: font,
@@ -149,33 +158,33 @@
         textGeo.computeVertexNormals();
         // "fix" side normals by removing z-component of normals for side faces
         // (this doesn't work well for beveled geometry as then we lose nice curvature around z-axis)
-         if ( ! bevelEnabled ) {
-           var triangleAreaHeuristics = 0.1 * ( height * size );
-           for ( var i = 0; i < textGeo.faces.length; i ++ ) {
-             var face = textGeo.faces[ i ];
-             if ( face.materialIndex == 1 ) {
-               for ( var j = 0; j < face.vertexNormals.length; j ++ ) {
-                 face.vertexNormals[ j ].z = 0;
-                 face.vertexNormals[ j ].normalize();
-               }
-               var va = textGeo.vertices[ face.a ];
-               var vb = textGeo.vertices[ face.b ];
-               var vc = textGeo.vertices[ face.c ];
-               var s = THREE.GeometryUtils.triangleArea( va, vb, vc );
-               if ( s > triangleAreaHeuristics ) {
-                 for ( var j = 0; j < face.vertexNormals.length; j ++ ) {
-                   face.vertexNormals[ j ].copy( face.normal );
-                 }
-               }
-             }
-           }
-         }
+        if (!bevelEnabled) {
+          var triangleAreaHeuristics = 0.1 * ( height * size );
+          for (var i = 0; i < textGeo.faces.length; i++) {
+            var face = textGeo.faces[i];
+            if (face.materialIndex == 1) {
+              for (var j = 0; j < face.vertexNormals.length; j++) {
+                face.vertexNormals[j].z = 0;
+                face.vertexNormals[j].normalize();
+              }
+              var va = textGeo.vertices[face.a];
+              var vb = textGeo.vertices[face.b];
+              var vc = textGeo.vertices[face.c];
+              var s = THREE.GeometryUtils.triangleArea(va, vb, vc);
+              if (s > triangleAreaHeuristics) {
+                for (var j = 0; j < face.vertexNormals.length; j++) {
+                  face.vertexNormals[j].copy(face.normal);
+                }
+              }
+            }
+          }
+        }
         var centerOffset = -0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
         textGeo = new THREE.BufferGeometry().fromGeometry(textGeo);
         textMesh1 = new THREE.Mesh(textGeo, materials);
         textMesh1.position.x = centerOffset;
         textMesh1.position.y = 0;
-        textMesh1.position.z = 0;
+        textMesh1.position.z = height;
         textMesh1.rotation.x = 0;
         textMesh1.rotation.y = Math.PI * 2;
         group.add(textMesh1);
@@ -190,12 +199,14 @@
 
         }
       }
+
       function refreshText() {
         group.remove(textMesh1);
 //        if ( mirror ) group.remove( textMesh2 );
         if (!text) return;
         createText();
       }
+
       function loadFont() {
         var loader = new THREE.FontLoader();
         loader.load('/fonts/' + fontName + '_' + 'bold' + '.typeface.json', function (response) {
@@ -291,21 +302,26 @@
     'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     display: block;
     font-weight: 300;
-    font-size: 100px;
-    color: #35495e;
+    font-size: 20px;
+    color: #ff4500;
     letter-spacing: 1px;
   }
 
   .subtitle {
+    position: absolute;
+    right: 30px;
+    top: 50px;
     font-weight: 300;
-    font-size: 42px;
-    color: #526488;
+    font-size: 20px;
+    color: #e6a23c;
     word-spacing: 5px;
     padding-bottom: 15px;
   }
 
-  .links {
-    padding-top: 15px;
+  .text {
+    position: absolute;
+    left: 30px;
+    top: 30px;
   }
 
 </style>

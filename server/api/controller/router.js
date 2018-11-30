@@ -4,6 +4,8 @@
 let indexshowController = require('./home') // 主页
 
 exports.indexShow = indexshowController.indexShow // 首页展示
+exports.getIpList = indexshowController.getIpList // 首页展示
+exports.getCount = indexshowController.getCount // 首页展示
 exports.getAddUser = indexshowController.getAddUser
 exports.delUser = indexshowController.delUser
 exports.updataUser = indexshowController.updataUser

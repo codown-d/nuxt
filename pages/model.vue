@@ -1,7 +1,5 @@
 <template>
   <div>
-    <p id="container"></p>
-    <div id="three">this is template body</div>
   </div>
 </template>
 <script>
@@ -48,7 +46,7 @@
         loader.load( '/model2/scene.gltf', function ( gltf ) {
           gltf.scene.traverse( function ( child ) {
             if ( child.isMesh ) {
-              child.material.envMap = envMap;
+//              child.material.envMap = envMap;
             }
           } );
           scene.add( gltf.scene );

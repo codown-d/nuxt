@@ -4,7 +4,9 @@
 const db = require('../../model/db.js')
 const sql = require('../../model/sql.js')
 const url = require('url')
-let {sendMsg}= require('../../utlis')
+let {sendMsg, getIp} = require('../../utlis')
+let request = require("request")
+
 // 引入redis
 /**
  *  index show
@@ -14,9 +16,67 @@ exports.indexShow = (req, res, next) => {
     if (err) {
       throw err
     }
-    let result=JSON.parse(JSON.stringify(rows))
+    let result = JSON.parse(JSON.stringify(rows))
     res.json(result)
     // 检查是否存在获取值（redis）
+  })
+}
+exports.getIpList = (req, res, next) => {
+  db.query(sql.iplist(), function (err, rows, fields) {
+    if (err) {
+      throw err
+    }
+    let result = JSON.parse(JSON.stringify(rows))
+    res.json(result)
+    // 检查是否存在获取值（redis）
+  })
+}
+let reqAddress = function (ip) {
+  let promise = new Promise(function (resolve, reject) {
+    request('http://ip.taobao.com/service/getIpInfo.php?ip=' + ip, function (error, response, data) {
+      if (error) {
+        resolve(error)
+      } else {
+        resolve(JSON.parse(data))
+      }
+    })
+  })
+  return promise
+}
+exports.getCount = (req, res, next) => {
+  var clientIp =getIp(req)
+  db.query(sql.findip({ip: clientIp}), async function (err, rows, fields) {
+    if (err) {
+      throw err
+    }
+    let result = JSON.parse(JSON.stringify(rows))
+    if(result.length===0){
+      result=[{ip:clientIp,count:0,address:''}]
+    }
+    let address = result[0].address
+    if(!address){
+      let {data} = await reqAddress(clientIp)
+      address = data.country +' '+ data.region +'市 '+ data.city
+    }
+    let data = Object.assign({}, result[0], {address: address})
+    console.log(data)
+    db.query(sql.addguest(data), function (err, rows1, fields) {
+      if (err) {
+        throw err
+      }
+      let result = JSON.parse(JSON.stringify(rows1))
+      if (result.changedRows == 1) {
+        db.query(sql.findip({ip: clientIp}), function (err, rows, fields) {
+          if (err) {
+            throw err
+          }
+          let result = JSON.parse(JSON.stringify(rows))
+          res.json(result)
+        })
+      } else {
+        res.json(sendMsg(200, rows.message))
+      }
+    })
   })
 }
 /*
@@ -72,11 +132,11 @@ exports.getAddUser = (req, res, next) => {
     age: params.query.age,
     address: params.query.address,
     role: params.query.role
-  }),function (err, rows, fields) {
+  }), function (err, rows, fields) {
     if (err) {
       throw err
     }
-    res.json(sendMsg(200,rows.message))
+    res.json(sendMsg(200, rows.message))
     // 检查是否存在获取值（redis）
   })
 }
@@ -88,23 +148,27 @@ exports.delUser = (req, res, next) => {
     age: params.query.age,
     address: params.query.address,
     role: params.query.role
-  }),function (err, rows, fields) {
-    if (err) {throw err}
-    res.json(sendMsg(200,rows.message))
+  }), function (err, rows, fields) {
+    if (err) {
+      throw err
+    }
+    res.json(sendMsg(200, rows.message))
     // 检查是否存在获取值（redis）
   })
 }
 exports.updataUser = (req, res, next) => {
   let params = url.parse(req.url, true)
   db.query(sql.updataUser({
-    id: params.query.id ,
+    id: params.query.id,
     name: params.query.name,
     age: params.query.age,
     address: params.query.address,
     role: params.query.role
-  }),function (err, rows, fields) {
-    if (err) {throw err}
-    res.json(sendMsg(200,rows.message))
+  }), function (err, rows, fields) {
+    if (err) {
+      throw err
+    }
+    res.json(sendMsg(200, rows.message))
     // 检查是否存在获取值（redis）
   })
 }

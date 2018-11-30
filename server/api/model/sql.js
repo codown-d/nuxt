@@ -21,6 +21,20 @@ exports.updataUser=({id,name,address,age,role})=>{
   age = '${age}',
   role = '${role}' WHERE id = '${id}'`
 }
+exports.iplist =()=>{
+  return  `select * from guest`;
+}
+exports.findip =({ip})=>{
+  return  `select * from guest where ip='${ip}'`;
+}
+exports.addguest=({ip,count,address})=>{
+  console.log(ip,count,address)
+  if(!count){
+    return `insert into guest(ip, count, address) values('${ip}', 1, '${address}')`
+  }else{
+    return `update guest set count = ${count+1} where ip = '${ip}'`
+  }
+}
 
 /**
  * 查找分类
