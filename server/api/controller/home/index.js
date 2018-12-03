@@ -46,11 +46,14 @@ let reqAddress = function (ip) {
 }
 exports.getCount = (req, res, next) => {
   var clientIp =getIp(req)
+  console.log('119.61.17.146',clientIp)
   db.query(sql.findip({ip: clientIp}), async function (err, rows, fields) {
     if (err) {
       throw err
     }
+
     let result = JSON.parse(JSON.stringify(rows))
+    console.log('result',result)
     if(result.length===0){
       result=[{ip:clientIp,count:0,address:''}]
     }
