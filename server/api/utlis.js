@@ -11,8 +11,10 @@ exports.sendMsg = (code,msg) => {
 }
 
 exports.getIp = function(req) {
-  console.log(req.headers)
-  var ip = req.headers['x-forwarded-for']||req.headers['x-real-ip'] ||req.socket.remoteAddress || '';
+  console.log(req)
+  var ip = req.headers['x-forwarded-for']||
+    req.headers['x-real-ip'] ||
+    req.socket.remoteAddress || '';
   if(ip.split(',').length>0){
     ip = ip.split(',')[0];
   }
