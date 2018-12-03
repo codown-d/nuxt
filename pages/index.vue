@@ -40,7 +40,7 @@
   THREE.Cache.enabled = true;
   export default {
     async asyncData({app}) {
-      const user = [{ip:'127.0.0.1',count:'9'}]//await app.$axios.$get('/api/getCount')
+      const user = await app.$axios.$get('/api/getCount')
       return {user}
     },
     components: {
