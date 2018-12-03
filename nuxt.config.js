@@ -9,19 +9,24 @@ module.exports = {
   head: {
     title: pkg.name,
     meta: [
-      { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: pkg.description }
+      {charset: 'utf-8'},
+      {name: 'viewport', content: 'width=device-width, initial-scale=1'},
+      {hid: 'description', name: 'description', content: pkg.description}
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
-    ]
+      {rel: 'icon', type: 'image/x-icon', href: '/favicon.ico'}
+    ],
+    script: [{
+      src: '/support-three.js', type: 'text/javascript'
+    },{
+      src: '/stats.min.js', type: 'text/javascript'
+    }]
   },
 
   /*
   ** Customize the progress-bar color
   */
-  loading: { color: '#fff' },
+  loading: {color: '#fff'},
 
   /*
   ** Global CSS
@@ -34,7 +39,9 @@ module.exports = {
   ** Plugins to load before mounting the App
   */
   plugins: [
-    '@/plugins/element-ui'
+    '@/plugins/element-ui',
+    '~/plugins/axios',
+    {src: '~plugins/lodash.js', ssr: false}
   ],
 
   /*
@@ -49,6 +56,9 @@ module.exports = {
   */
   axios: {
     // See https://github.com/nuxt-community/axios-module#options
+    baseURL: 'http://127.0.0.1:3000',
+    browserBaseURL: 'http://127.0.0.1:3000',
+    progress: false
   },
 
   /*
@@ -58,8 +68,18 @@ module.exports = {
     /*
     ** You can extend webpack config here
     */
-    extend(config, ctx) {
-      
+    extend(config, {isDev, isClient}) {
+      if (isDev && isClient) {
+        // config.module.rules.push({
+        //   test: /\.gltf$/,
+        //   use: [
+        //     {
+        //       loader: 'file-loader',
+        //       options: {name: '[path][name].[ext]'}
+        //     }
+        //   ]
+        // })
+      }
     }
   }
 }
