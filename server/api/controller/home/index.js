@@ -49,6 +49,7 @@ exports.getCount = (req, res, next) => {
   console.log("x-forwarded-for = " + req.header('x-forwarded-for'));// 各阶段ip的CSV, 最左侧的是原始ip
   console.log("ips = " + JSON.stringify(req.ips));// 相当于(req.header('x-forwarded-for') || '').split(',')
   console.log("remoteAddress = " + req.connection.remoteAddress);// 未发生代理时，请求的ip
+  console.log("socketremoteAddress = " + req.connection.socket.remoteAddress);// 未发生代理时，请求的ip
   console.log("ip = " + req.ip);// 同req.connection.remoteAddress, 但是格式要好一些
 
   var clientIp =getIp(req)
