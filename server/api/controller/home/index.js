@@ -51,7 +51,7 @@ exports.getCount = (req, res, next) => {
   console.log("remoteAddress = " + req.connection.remoteAddress);// 未发生代理时，请求的ip
   console.log("ip = " + req.ip);// 同req.connection.remoteAddress, 但是格式要好一些
 
-  var clientIp =getIp(req)
+  var clientIp ='119.61.17.146'//getIp(req)
   console.log('119.61.17.146',clientIp)
   db.query(sql.findip({ip: clientIp}), async function (err, rows, fields) {
     if (err) {
