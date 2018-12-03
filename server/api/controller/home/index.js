@@ -37,6 +37,7 @@ let reqAddress = function (ip) {
       if (error) {
         resolve(error)
       } else {
+        console.log(data)
         resolve(JSON.parse(data))
       }
     })
