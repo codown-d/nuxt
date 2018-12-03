@@ -11,7 +11,8 @@ exports.sendMsg = (code,msg) => {
 }
 
 exports.getIp = function(req) {
-  console.log(req)
+  console.log(req.headers)
+  console.log(req.socket)
   var ip = req.headers['x-forwarded-for']||
     req.headers['x-real-ip'] ||
     req.socket.remoteAddress || '';
