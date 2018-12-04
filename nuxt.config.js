@@ -69,10 +69,10 @@ module.exports = {
     ** You can extend webpack config here
     */
     extend(config, {isDev, isClient}) {
-      config.performance.hints=process.env.NODE_ENV === 'production' ? false : 'warning'
-      console.log(config)
-      config.output.publicPath= '/dist/_nuxt/'
       if (isDev && isClient) {
+        config.performance.hints=process.env.NODE_ENV === 'production' ? false : 'warning'
+        // config.output.publicPath= './_nuxt/'
+        config.output.publicPath= 'https://callmezhang.github.io/'
         // config.module.rules.push({
         //   test: /\.gltf$/,
         //   use: [
