@@ -70,6 +70,8 @@ module.exports = {
     */
     extend(config, {isDev, isClient}) {
       config.performance.hints=process.env.NODE_ENV === 'production' ? false : 'warning'
+      console.log(config)
+      config.output.publicPath= '/dist/_nuxt/'
       if (isDev && isClient) {
         // config.module.rules.push({
         //   test: /\.gltf$/,
