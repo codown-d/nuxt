@@ -69,6 +69,7 @@ module.exports = {
     ** You can extend webpack config here
     */
     extend(config, {isDev, isClient}) {
+      config.performance.hints=process.env.NODE_ENV === 'production' ? false : 'warning'
       if (isDev && isClient) {
         // config.module.rules.push({
         //   test: /\.gltf$/,
